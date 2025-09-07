@@ -26,6 +26,7 @@ class DirekturPanelProvider extends PanelProvider
         return $panel
             ->id('direktur')
             ->path('/direktur')
+            ->domain(env('FILAMENT_DOMAIN'))
             ->login()
             ->colors([
                 'primary' => Color::Green,

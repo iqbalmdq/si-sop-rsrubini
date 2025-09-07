@@ -26,6 +26,7 @@ class BidangPanelProvider extends PanelProvider
         return $panel
             ->id('bidang')
             ->path('/bidang')
+            ->domain(env('FILAMENT_DOMAIN'))
             ->login()
             ->colors([
                 'primary' => Color::Blue,
