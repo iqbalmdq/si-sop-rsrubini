@@ -56,7 +56,8 @@ class BidangPanelProvider extends PanelProvider
             ->favicon(asset('images/favicon.ico'))
             ->navigationGroups([
                 'Manajemen SOP',
-                'Notifikasi',
+                'Manajemen Survei',
+                'Notifikasi & Komunikasi',
                 'Pengaturan',
             ]);
     }

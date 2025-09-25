@@ -36,6 +36,9 @@ class DirekturPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Direktur/Widgets'), for: 'App\\Filament\\Direktur\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                \App\Filament\Direktur\Widgets\SurveyStatsWidget::class,
+                \App\Filament\Direktur\Widgets\SurveyResponseChart::class,
+                \App\Filament\Direktur\Widgets\SurveyByBidangChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -56,8 +59,8 @@ class DirekturPanelProvider extends PanelProvider
             ->favicon(asset('images/favicon.ico'))
             ->navigationGroups([
                 'Dashboard & Analytics',
-                'History & Audit',
-                'Laporan',
+                'Analisis & Laporan',
+                'Riwayat & Audit',
             ]);
     }
 }

@@ -9,9 +9,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            KategoriSopSeeder::class,
             UserSeeder::class,
+            KategoriSopSeeder::class,
             SampleSopSeeder::class,
+            SurveySeeder::class, // Tambahkan ini
         ]);
     }
 }
