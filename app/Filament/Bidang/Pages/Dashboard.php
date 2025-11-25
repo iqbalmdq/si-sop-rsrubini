@@ -10,7 +10,6 @@ class Dashboard extends BaseDashboard
     {
         return [
             \Filament\Widgets\AccountWidget::class,
-            \App\Filament\Bidang\Widgets\NotifikasiTerbaruWidget::class,
         ];
     }
 }

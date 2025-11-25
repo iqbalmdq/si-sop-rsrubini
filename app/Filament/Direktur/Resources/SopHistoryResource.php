@@ -8,10 +8,10 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Model;
 
 class SopHistoryResource extends Resource
@@ -20,13 +20,15 @@ class SopHistoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $navigationGroup = 'History & Audit';
+    protected static ?string $navigationGroup = 'Dasbor & Analisis';
 
-    protected static ?string $navigationLabel = 'History SOP';
+    protected static ?string $navigationLabel = 'Riwayat SOP';
 
-    protected static ?string $modelLabel = 'History SOP';
+    protected static ?string $modelLabel = 'Riwayat SOP';
 
-    protected static ?string $pluralModelLabel = 'History SOP';
+    protected static ?string $pluralModelLabel = 'Riwayat SOP';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -55,7 +57,7 @@ class SopHistoryResource extends Resource
                             ->rows(3),
                     ])
                     ->columns(2),
-                    
+
                 Forms\Components\Section::make('Data Perubahan')
                     ->schema([
                         Forms\Components\KeyValue::make('data_lama')
@@ -86,6 +88,7 @@ class SopHistoryResource extends Resource
                     ->limit(40)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
+
                         return strlen($state) > 40 ? $state : null;
                     }),
                 Tables\Columns\TextColumn::make('aksi')

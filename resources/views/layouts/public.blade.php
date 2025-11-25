@@ -28,48 +28,38 @@
     <header class="bg-blue-600 text-white shadow-lg">
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <i class="fas fa-hospital text-2xl"></i>
-                    <div>
-                        <h1 class="text-xl font-bold">SI-SOP</h1>
-                        <p class="text-sm text-blue-100">Rumah Sakit Rubini Mempawah</p>
+                <a href="{{ route('sop.index') }}" class="hover:text-blue-200 transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-hospital text-2xl"></i>
+                        <div>
+                            <h1 class="text-xl font-bold">SI-SOP</h1>
+                            <p class="text-sm text-blue-100">Rumah Sakit Rubini Mempawah</p>
+                        </div>
                     </div>
-                </div>
+                </a>
                 <nav class="hidden md:flex space-x-6">
                     <a href="{{ route('sop.index') }}" class="hover:text-blue-200 transition-colors">
-                        <i class="fas fa-home mr-2"></i>Beranda
+                        <i class="fas fa-search mr-2"></i>Pencarian Dokumen
                     </a>
                     <a href="{{ route('survey.index') }}" class="hover:text-blue-200 transition-colors">
-                        <i class="fas fa-poll mr-2"></i>Survei
-                    </a>
-                    <a href="{{ route('filament.direktur.auth.login') }}" class="hover:text-blue-200 transition-colors">
-                        <i class="fas fa-user-tie mr-2"></i>Login Direktur
-                    </a>
-                    <a href="{{ route('filament.bidang.auth.login') }}" class="hover:text-blue-200 transition-colors">
-                        <i class="fas fa-user mr-2"></i>Login Bidang
+                        <i class="fas fa-poll mr-2"></i>Survei Publik
                     </a>
                 </nav>
-                
+
                 <!-- Mobile Menu Button -->
                 <button class="md:hidden text-white" x-data @click="$refs.mobileMenu.classList.toggle('hidden')">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
-            
+
             <!-- Mobile Menu -->
             <div x-ref="mobileMenu" class="hidden md:hidden mt-4 pb-4">
                 <div class="space-y-2">
                     <a href="{{ route('sop.index') }}" class="block py-2 hover:text-blue-200 transition-colors">
-                        <i class="fas fa-home mr-2"></i>Beranda
+                        <i class="fas fa-search mr-2"></i>Pencarian Dokumen
                     </a>
                     <a href="{{ route('survey.index') }}" class="block py-2 hover:text-blue-200 transition-colors">
-                        <i class="fas fa-poll mr-2"></i>Survei
-                    </a>
-                    <a href="{{ route('filament.direktur.auth.login') }}" class="block py-2 hover:text-blue-200 transition-colors">
-                        <i class="fas fa-user-tie mr-2"></i>Login Direktur
-                    </a>
-                    <a href="{{ route('filament.bidang.auth.login') }}" class="block py-2 hover:text-blue-200 transition-colors">
-                        <i class="fas fa-user mr-2"></i>Login Bidang
+                        <i class="fas fa-poll mr-2"></i>Survei Publik
                     </a>
                 </div>
             </div>
@@ -78,24 +68,24 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        @if(session('success'))
+        @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 <i class="fas fa-check-circle mr-2"></i>
                 {{ session('success') }}
             </div>
         @endif
 
-        @if(session('error'))
+        @if (session('error'))
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
                 <i class="fas fa-exclamation-circle mr-2"></i>
                 {{ session('error') }}
             </div>
         @endif
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
                 <ul class="list-disc list-inside">
-                    @foreach($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -132,14 +122,6 @@
                         <a href="{{ route('survey.index') }}"
                             class="block text-gray-300 hover:text-white transition-colors">
                             <i class="fas fa-poll mr-2"></i>Survei Publik
-                        </a>
-                        <a href="{{ route('filament.direktur.auth.login') }}"
-                            class="block text-gray-300 hover:text-white transition-colors">
-                            <i class="fas fa-chart-bar mr-2"></i>Dashboard Direktur
-                        </a>
-                        <a href="{{ route('filament.bidang.auth.login') }}"
-                            class="block text-gray-300 hover:text-white transition-colors">
-                            <i class="fas fa-user mr-2"></i>Portal Bidang
                         </a>
                     </div>
                 </div>

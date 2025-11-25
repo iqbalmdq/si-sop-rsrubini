@@ -10,10 +10,17 @@ use Illuminate\View\View;
 
 class PublicSopController extends Controller
 {
+    private function findActiveSopByNomorOrFail(string $nomorSop): Sop
+    {
+        return Sop::where('nomor_sop', $nomorSop)->where('status', 'aktif')->firstOrFail();
+    }
+
     public function index(): View
     {
         $kategoris = KategoriSop::where('is_active', true)
-            ->withCount('sops')
+            ->withCount(['sops' => function ($q) {
+                $q->where('status', 'aktif');
+            }])
             ->orderBy('nama_kategori')
             ->get();
 
@@ -55,14 +62,29 @@ class PublicSopController extends Controller
                 'last_page' => $sops->lastPage(),
                 'per_page' => $sops->perPage(),
                 'total' => $sops->total(),
-            ]
+            ],
         ]);
     }
 
-    public function showByParts($type, $category, $number, $year): View
+    public function show(string $nomor_sop): View
     {
-        $nomor_sop = "{$type}/{$category}/{$number}/{$year}";
-        $sop = Sop::where('nomor_sop', $nomor_sop)->where('status', 'aktif')->firstOrFail();
+        $sop = $this->findActiveSopByNomorOrFail($nomor_sop);
+
+        $sop->load(['kategori', 'creator']);
+
+        $relatedSops = Sop::where('kategori_id', $sop->kategori_id)
+            ->where('id', '!=', $sop->id)
+            ->where('status', 'aktif')
+            ->limit(5)
+            ->get();
+
+        return view('public.sop.show', compact('sop', 'relatedSops'));
+    }
+
+    public function showByParts(...$parts): View
+    {
+        $nomor_sop = implode('/', $parts);
+        $sop = $this->findActiveSopByNomorOrFail($nomor_sop);
 
         $sop->load(['kategori', 'creator']);
 
@@ -76,51 +98,74 @@ class PublicSopController extends Controller
         return view('public.sop.show', compact('sop', 'relatedSops'));
     }
 
-    public function download(Sop $sop)
+    public function download(string $sop)
     {
-        if ($sop->status !== 'aktif' || !$sop->file_path) {
+        $sopModel = $this->findActiveSopByNomorOrFail($sop);
+
+        if ($sopModel->status !== 'aktif' || ! $sopModel->file_path) {
             abort(404, 'File SOP tidak ditemukan.');
         }
 
-        $filePath = storage_path('app/public/' . $sop->file_path);
+        $filePath = storage_path('app/public/'.$sopModel->file_path);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             abort(404, 'File tidak ditemukan.');
         }
 
         // Sanitize filename by replacing slashes with dashes
-        $filename = str_replace(['/', '\\'], '-', $sop->nomor_sop) . '.pdf';
+        $filename = str_replace(['/', '\\'], '-', $sopModel->nomor_sop).'.pdf';
 
         return response()->download($filePath, $filename);
     }
 
-    public function downloadByParts($type, $category, $number, $year)
+    public function downloadByParts(...$parts)
     {
-        $nomor_sop = "{$type}/{$category}/{$number}/{$year}";
-        $sop = Sop::where('nomor_sop', $nomor_sop)->where('status', 'aktif')->firstOrFail();
+        $nomor_sop = implode('/', $parts);
+        $sop = $this->findActiveSopByNomorOrFail($nomor_sop);
 
-        if (!$sop->file_path) {
+        if (! $sop->file_path) {
             abort(404, 'File SOP tidak ditemukan.');
         }
 
-        $filePath = storage_path('app/public/' . $sop->file_path);
+        $filePath = storage_path('app/public/'.$sop->file_path);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             abort(404, 'File tidak ditemukan.');
         }
 
         // Sanitize filename by replacing slashes with dashes
-        $filename = str_replace(['/', '\\'], '-', $sop->nomor_sop) . '.pdf';
+        $filename = str_replace(['/', '\\'], '-', $sop->nomor_sop).'.pdf';
 
         return response()->download($filePath, $filename);
+    }
+
+    public function preview(string $sop)
+    {
+        $sopModel = $this->findActiveSopByNomorOrFail($sop);
+
+        if ($sopModel->status !== 'aktif' || ! $sopModel->file_path) {
+            abort(404, 'File SOP tidak ditemukan.');
+        }
+
+        $filePath = storage_path('app/public/'.$sopModel->file_path);
+
+        if (! file_exists($filePath)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 
     public function getBidangList(): JsonResponse
     {
-        $bidangs = Sop::where('status', 'aktif')
+        $bidangs = Sop::query()
+            ->where('status', 'aktif')
+            ->select('bidang_bagian')
             ->distinct()
+            ->orderBy('bidang_bagian')
             ->pluck('bidang_bagian')
-            ->sort()
             ->values();
 
         return response()->json($bidangs);

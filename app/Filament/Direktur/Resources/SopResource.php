@@ -3,16 +3,15 @@
 namespace App\Filament\Direktur\Resources;
 
 use App\Filament\Direktur\Resources\SopResource\Pages;
-use App\Models\Sop;
 use App\Models\KategoriSop;
+use App\Models\Sop;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Support\Enums\FontWeight;
+use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
 class SopResource extends Resource
@@ -21,13 +20,15 @@ class SopResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = 'Dashboard & Analytics';
+    protected static ?string $navigationGroup = 'Dasbor & Analisis';
 
     protected static ?string $navigationLabel = 'Semua SOP';
 
     protected static ?string $modelLabel = 'SOP';
 
     protected static ?string $pluralModelLabel = 'SOP';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -59,7 +60,7 @@ class SopResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
-                    
+
                 Forms\Components\Section::make('Status & Versi')
                     ->schema([
                         Forms\Components\TextInput::make('status')
@@ -101,6 +102,7 @@ class SopResource extends Resource
                     ->limit(40)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
+
                         return strlen($state) > 40 ? $state : null;
                     }),
                 Tables\Columns\TextColumn::make('kategori.nama_kategori')

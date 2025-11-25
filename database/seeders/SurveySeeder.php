@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class SurveySeeder extends Seeder
 {
     public function run(): void
     {
         $bidangUser = User::where('role', 'bidang')->first();
-        
+
         // Survey 1: Kepuasan Layanan
         $survey1 = Survey::create([
             'judul' => 'Survei Kepuasan Layanan Rumah Sakit',
@@ -76,13 +76,13 @@ class SurveySeeder extends Seeder
         // Survey 2: Evaluasi SOP
         $survey2 = Survey::create([
             'judul' => 'Evaluasi Efektivitas Standard Operating Procedure (SOP)',
-            'deskripsi' => 'Survei ini ditujukan untuk mengevaluasi sejauh mana SOP yang berlaku dapat dipahami, diimplementasikan, dan memberikan manfaat dalam operasional sehari-hari di bidang medis.',
+            'deskripsi' => 'Survei ini ditujukan untuk mengevaluasi sejauh mana SOP yang berlaku dapat dipahami, diimplementasikan, dan memberikan manfaat dalam operasional sehari-hari di bidang pelayanan.',
             'status' => 'aktif',
             'anonim' => false,
             'izin_respon_ganda' => false,
             'tanggal_mulai' => now(),
             'tanggal_berakhir' => now()->addDays(14),
-            'target_bidang' => 'Bidang Medis',
+            'target_bidang' => 'Bidang Pelayanan',
             'dibuat_oleh' => $bidangUser->id,
         ]);
 

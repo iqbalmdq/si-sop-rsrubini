@@ -128,6 +128,9 @@
                             <a :href="`/sop/${sop.nomor_sop}`" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center">
                                 <i class="fas fa-eye mr-2"></i>Lihat
                             </a>
+                            <button x-show="sop.file_path" @click="openPreview(sop)" class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-center">
+                                <i class="fas fa-file-pdf mr-2"></i>Preview
+                            </button>
                             <a x-show="sop.file_path" :href="`/sop/${sop.nomor_sop}/download`" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-center">
                                 <i class="fas fa-download mr-2"></i>Download
                             </a>
@@ -171,6 +174,19 @@
         </div>
     </div>
     
+    <!-- Preview Modal -->
+    <div x-show="showPreview" x-cloak class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl">
+            <div class="flex items-center justify-between px-4 py-3 border-b">
+                <div class="text-lg font-semibold">Preview Dokumen SOP</div>
+                <button @click="closePreview()" class="text-gray-600 hover:text-gray-800"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-0">
+                <iframe :src="previewUrl" class="w-full h-[75vh]" allow="fullscreen"></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- No Results -->
     <div x-show="!loading && searchResults.length === 0 && hasSearched" x-cloak class="text-center py-12">
         <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
@@ -214,6 +230,8 @@ function sopSearch() {
         bidangList: [],
         loading: false,
         hasSearched: false,
+        showPreview: false,
+        previewUrl: '',
         pagination: {
             current_page: 1,
             last_page: 1,
@@ -297,6 +315,13 @@ function sopSearch() {
                 month: '2-digit',
                 year: 'numeric'
             });
+        },
+        openPreview(sop) {
+            this.previewUrl = `/sop/${sop.nomor_sop}/preview`;
+            this.showPreview = true;
+        },
+        closePreview() {
+            this.showPreview = false;
         }
     }
 }

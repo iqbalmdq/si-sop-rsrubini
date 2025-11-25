@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -20,29 +20,39 @@ class UserSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // User Bidang Medis
+        // User Bagian Tata Usaha
         User::create([
-            'name' => 'Admin Bidang Medis',
-            'email' => 'medis@rsrubini.com',
+            'name' => 'Bagian Tata Usaha',
+            'email' => 'tatausaha@rsrubini.com',
             'password' => Hash::make('password123'),
             'role' => 'bidang',
-            'bidang_bagian' => 'Bidang Medis',
+            'bidang_bagian' => 'Bagian Tata Usaha',
             'is_active' => true,
         ]);
 
-        // User Bidang Keperawatan
+        // User Bidang Pelayanan
         User::create([
-            'name' => 'Admin Bidang Keperawatan',
-            'email' => 'keperawatan@rsrubini.com',
+            'name' => 'Bidang Pelayanan',
+            'email' => 'pelayanan@rsrubini.com',
             'password' => Hash::make('password123'),
             'role' => 'bidang',
-            'bidang_bagian' => 'Bidang Keperawatan',
+            'bidang_bagian' => 'Bidang Pelayanan',
+            'is_active' => true,
+        ]);
+
+        // User Bidang Pengendalian
+        User::create([
+            'name' => 'Bidang Pengendalian',
+            'email' => 'pengendalian@rsrubini.com',
+            'password' => Hash::make('password123'),
+            'role' => 'bidang',
+            'bidang_bagian' => 'Bidang Pengendalian',
             'is_active' => true,
         ]);
 
         // User Bidang Penunjang
         User::create([
-            'name' => 'Admin Bidang Penunjang',
+            'name' => 'Bidang Penunjang',
             'email' => 'penunjang@rsrubini.com',
             'password' => Hash::make('password123'),
             'role' => 'bidang',

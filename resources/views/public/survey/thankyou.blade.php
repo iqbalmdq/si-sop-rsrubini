@@ -26,6 +26,12 @@
                 <i class="fas fa-poll mr-2"></i>
                 Lihat Survei Lainnya
             </a>
+
+            <button type="button" id="copy-survey-link" 
+                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors ml-2">
+                <i class="fas fa-link mr-2"></i>
+                Salin Link Survei
+            </button>
             
             <div class="text-center">
                 <a href="{{ route('sop.index') }}" 
@@ -38,3 +44,22 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('copy-survey-link');
+    if (!btn) return;
+    var link = "{{ session('share_link') }}";
+    btn.addEventListener('click', async function () {
+        if (!link) return;
+        try {
+            await navigator.clipboard.writeText(link);
+            var old = btn.textContent;
+            btn.textContent = 'Tersalin';
+            setTimeout(function () { btn.textContent = old; }, 1500);
+        } catch (e) {}
+    });
+});
+</script>
+@endpush

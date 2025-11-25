@@ -4,21 +4,19 @@ namespace App\Filament\Bidang\Resources;
 
 use App\Filament\Bidang\Resources\SurveyResource\Pages;
 use App\Models\Survey;
-use App\Models\KategoriSop;
-use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Section;
 
 class SurveyResource extends Resource
 {
@@ -46,12 +44,12 @@ class SurveyResource extends Resource
                             ->placeholder('Contoh: Survei Kepuasan Layanan Rumah Sakit')
                             ->required()
                             ->maxLength(255),
-                        
+
                         Textarea::make('deskripsi')
                             ->label('Deskripsi Survei')
                             ->placeholder('Jelaskan tujuan dan konteks survei ini...')
                             ->rows(3),
-                        
+
                         Select::make('status')
                             ->label('Status Survei')
                             ->options([
@@ -62,42 +60,43 @@ class SurveyResource extends Resource
                             ->default('konsep')
                             ->required()
                             ->helperText('Survei hanya dapat diisi jika statusnya Aktif'),
-                        
+
                         Select::make('target_bidang')
-                            ->label('Target Responden')
+                            ->label('Pemilik Survei')
                             ->options([
-                                'Bidang Medis' => 'Bidang Medis',
-                                'Bidang Keperawatan' => 'Bidang Keperawatan',
+                                'Bagian Tata Usaha' => 'Bagian Tata Usaha',
+                                'Bidang Pelayanan' => 'Bidang Pelayanan',
+                                'Bidang Pengendalian' => 'Bidang Pengendalian',
                                 'Bidang Penunjang' => 'Bidang Penunjang',
                             ])
                             ->placeholder('Semua Bidang')
                             ->helperText('Kosongkan jika survei ditujukan untuk semua bidang'),
                     ])
                     ->columns(2),
-                
+
                 Section::make('Pengaturan Survei')
                     ->description('Atur cara survei akan dijalankan')
                     ->schema([
                         Toggle::make('anonim')
                             ->label('Survei Anonim')
                             ->helperText('Jika diaktifkan, responden tidak perlu login untuk mengisi survei'),
-                        
+
                         Toggle::make('izin_respon_ganda')
                             ->label('Izinkan Respons Berulang')
                             ->helperText('Jika diaktifkan, satu orang dapat mengisi survei lebih dari sekali'),
-                        
+
                         DateTimePicker::make('tanggal_mulai')
                             ->label('Tanggal Mulai')
                             ->helperText('Survei dapat diisi mulai tanggal ini')
                             ->native(false),
-                        
+
                         DateTimePicker::make('tanggal_berakhir')
                             ->label('Tanggal Berakhir')
                             ->helperText('Survei tidak dapat diisi setelah tanggal ini')
                             ->native(false),
                     ])
                     ->columns(2),
-                
+
                 Section::make('Daftar Pertanyaan')
                     ->description('Buat pertanyaan-pertanyaan untuk survei Anda')
                     ->schema([
@@ -109,7 +108,7 @@ class SurveyResource extends Resource
                                     ->placeholder('Tulis pertanyaan Anda di sini...')
                                     ->required()
                                     ->columnSpanFull(),
-                                
+
                                 Select::make('tipe_pertanyaan')
                                     ->label('Jenis Pertanyaan')
                                     ->options([
@@ -125,11 +124,11 @@ class SurveyResource extends Resource
                                     ->required()
                                     ->reactive()
                                     ->helperText('Pilih jenis pertanyaan yang sesuai'),
-                                
+
                                 Toggle::make('wajib_diisi')
                                     ->label('Wajib Diisi')
                                     ->helperText('Responden harus menjawab pertanyaan ini'),
-                                
+
                                 Repeater::make('pilihan')
                                     ->label('Pilihan Jawaban')
                                     ->schema([
@@ -164,7 +163,7 @@ class SurveyResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->wrap(),
-                
+
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->label('Status')
@@ -179,31 +178,31 @@ class SurveyResource extends Resource
                         'tutup' => 'Ditutup', // Display tetap 'Ditutup'
                         default => $state,
                     }),
-                
+
                 Tables\Columns\TextColumn::make('target_bidang')
-                    ->label('Target Responden')
+                    ->label('Pemilik Survei')
                     ->placeholder('Semua Bidang')
                     ->badge()
                     ->color('info'),
-                
+
                 Tables\Columns\TextColumn::make('total_responses')
                     ->label('Jumlah Respons')
                     ->getStateUsing(fn (Survey $record): int => $record->responses()->count())
                     ->badge()
                     ->color('success'),
-                
+
                 Tables\Columns\TextColumn::make('tanggal_mulai')
                     ->label('Mulai')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->placeholder('Tidak diatur'),
-                
+
                 Tables\Columns\TextColumn::make('tanggal_berakhir')
                     ->label('Berakhir')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->placeholder('Tidak diatur'),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d/m/Y H:i')
@@ -218,12 +217,13 @@ class SurveyResource extends Resource
                         'aktif' => 'Aktif',
                         'ditutup' => 'Ditutup',
                     ]),
-                
+
                 Tables\Filters\SelectFilter::make('target_bidang')
-                    ->label('Target Responden')
+                    ->label('Pemilik Survei')
                     ->options([
-                        'Bidang Medis' => 'Bidang Medis',
-                        'Bidang Keperawatan' => 'Bidang Keperawatan',
+                        'Bagian Tata Usaha' => 'Bagian Tata Usaha',
+                        'Bidang Pelayanan' => 'Bidang Pelayanan',
+                        'Bidang Pengendalian' => 'Bidang Pengendalian',
                         'Bidang Penunjang' => 'Bidang Penunjang',
                     ]),
             ])
@@ -232,29 +232,42 @@ class SurveyResource extends Resource
                     ->label('Lihat'),
                 Tables\Actions\EditAction::make()
                     ->label('Edit'),
+                Tables\Actions\Action::make('view_results')
+                    ->label('Lihat Hasil')
+                    ->icon('heroicon-o-chart-bar')
+                    ->color('success')
+                    ->url(fn (Survey $record): string => static::getUrl('results', ['record' => $record]))
+                    ->visible(fn (Survey $record): bool => $record->responses()->count() > 0),
                 Tables\Actions\Action::make('duplicate')
                     ->label('Salin Survei')
                     ->icon('heroicon-o-document-duplicate')
                     ->color('info')
                     ->action(function (Survey $record) {
                         $newSurvey = $record->replicate();
-                        $newSurvey->judul = $record->judul . ' (Salinan)';
+                        $newSurvey->judul = $record->judul.' (Salinan)';
                         $newSurvey->status = 'konsep'; // Pastikan menggunakan 'konsep' bukan 'draft'
                         $newSurvey->dibuat_oleh = Auth::id();
                         $newSurvey->save();
-                        
+
                         foreach ($record->questions as $question) {
                             $newQuestion = $question->replicate();
                             $newQuestion->survey_id = $newSurvey->id;
                             $newQuestion->save();
                         }
-                        
+
                         return redirect()->route('filament.bidang.resources.surveys.edit', $newSurvey);
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Salin Survei')
                     ->modalDescription('Apakah Anda yakin ingin menyalin survei ini? Salinan akan dibuat dengan status Konsep.')
                     ->modalSubmitActionLabel('Ya, Salin'),
+                Tables\Actions\Action::make('share_link')
+                    ->label('Bagikan Link')
+                    ->icon('heroicon-o-link')
+                    ->color('primary')
+                    ->url(fn (Survey $record): string => route('survey.show', $record))
+                    ->openUrlInNewTab()
+                    ->tooltip('Buka tautan survei publik'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -287,6 +300,7 @@ class SurveyResource extends Resource
             'create' => Pages\CreateSurvey::route('/create'),
             'view' => Pages\ViewSurvey::route('/{record}'),
             'edit' => Pages\EditSurvey::route('/{record}/edit'),
+            'results' => Pages\ViewSurveyResults::route('/{record}/results'),
         ];
     }
 }

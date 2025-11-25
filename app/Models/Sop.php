@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 class Sop extends Model
 {
@@ -72,9 +72,14 @@ class Sop extends Model
     {
         return $query->where(function ($q) use ($search) {
             $q->where('nomor_sop', 'like', "%{$search}%")
-              ->orWhere('judul_sop', 'like', "%{$search}%")
-              ->orWhere('deskripsi', 'like', "%{$search}%")
-              ->orWhere('isi_sop', 'like', "%{$search}%");
+                ->orWhere('judul_sop', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%")
+                ->orWhere('isi_sop', 'like', "%{$search}%");
         });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'id';
     }
 }

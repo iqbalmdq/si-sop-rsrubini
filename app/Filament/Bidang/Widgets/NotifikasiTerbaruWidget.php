@@ -11,25 +11,30 @@ use Illuminate\Support\Facades\Auth;
 class NotifikasiTerbaruWidget extends BaseWidget
 {
     protected static ?string $heading = 'Notifikasi Terbaru';
-    
+
     protected static ?int $sort = 2;
-    
-    protected int | string | array $columnSpan = 'full';
+
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
-        $userBidang = Auth::user()->bidang_bagian;
-        
+        $user = Auth::user();
+        $query = Notifikasi::with(['sop', 'creator'])
+            ->latest()
+            ->limit(5);
+
+        if ($user && method_exists($user, 'isDirektur')) {
+            // Direktur melihat semua notifikasi
+        } else {
+            $userBidang = $user?->bidang_bagian;
+            $query->where(function ($q) use ($userBidang) {
+                $q->whereNull('target_bidang')
+                    ->orWhere('target_bidang', $userBidang);
+            });
+        }
+
         return $table
-            ->query(
-                Notifikasi::with(['sop', 'creator'])
-                    ->where(function ($query) use ($userBidang) {
-                        $query->whereNull('target_bidang')
-                              ->orWhere('target_bidang', $userBidang);
-                    })
-                    ->latest()
-                    ->limit(5)
-            )
+            ->query($query)
             ->columns([
                 Tables\Columns\IconColumn::make('is_read')
                     ->label('')
@@ -69,11 +74,16 @@ class NotifikasiTerbaruWidget extends BaseWidget
                 Tables\Actions\Action::make('view')
                     ->label('Lihat')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (Notifikasi $record): string => 
-                        route('filament.bidang.resources.notifikasis.view', $record)
-                    )
+                    ->url(function (Notifikasi $record): string {
+                        $user = Auth::user();
+                        if ($user && method_exists($user, 'isDirektur')) {
+                            return route('filament.direktur.resources.notifikasis.view', $record);
+                        }
+
+                        return route('filament.bidang.resources.notifikasis.view', $record);
+                    })
                     ->after(function (Notifikasi $record) {
-                        if (!$record->is_read) {
+                        if (! $record->is_read) {
                             $record->update(['is_read' => true]);
                         }
                     }),

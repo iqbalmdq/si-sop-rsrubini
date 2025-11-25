@@ -22,10 +22,10 @@
                 <h2 class="text-xl font-semibold mb-4">Analisis Hasil Survei</h2>
                 
                 @php
-                    $analysisData = $this->getAnalysisData();
+                    $resultsData = $this->getResultsData();
                 @endphp
                 
-                @if(count($analysisData) === 0)
+                @if(count($resultsData) === 0)
                     <div class="text-center py-8">
                         <div class="text-gray-400 text-6xl mb-4">
                             <i class="fas fa-chart-bar"></i>
@@ -34,7 +34,7 @@
                         <p class="text-gray-500">Survei ini belum memiliki respons atau pertanyaan untuk dianalisis.</p>
                     </div>
                 @else
-                    @foreach($analysisData as $index => $question)
+                    @foreach($resultsData as $index => $question)
                         <div class="mb-8 p-4 border rounded-lg bg-gray-50">
                             <h3 class="text-lg font-medium mb-4 text-gray-800">
                                 Pertanyaan {{ $index + 1 }}: {{ $question['question'] }}
@@ -123,7 +123,7 @@
                                                 <div class="mt-2 flex items-center">
                                                     @for($i = 1; $i <= 5; $i++)
                                                         <svg class="w-4 h-4 {{ $i <= $question['data']['average'] ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292z"/>
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                                         </svg>
                                                     @endfor
                                                 </div>
@@ -213,7 +213,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             showTab('analysis');
             
-            @foreach($analysisData as $index => $question)
+            @foreach($resultsData as $index => $question)
                 @if($question['data']['chart_type'] !== 'text' && $question['data']['chart_type'] !== 'number')
                     const ctx{{ $index }} = document.getElementById('chart-{{ $index }}').getContext('2d');
                     new Chart(ctx{{ $index }}, {

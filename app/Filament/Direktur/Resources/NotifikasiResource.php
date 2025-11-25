@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Bidang\Resources;
+namespace App\Filament\Direktur\Resources;
 
-use App\Filament\Bidang\Resources\NotifikasiResource\Pages;
+use App\Filament\Direktur\Resources\NotifikasiResource\Pages;
 use App\Models\Notifikasi;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,7 +12,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 class NotifikasiResource extends Resource
 {
@@ -84,6 +83,22 @@ class NotifikasiResource extends Resource
 
                                 return '';
                             }),
+                        Forms\Components\Placeholder::make('target_bidang_display')
+                            ->label('Target Bidang')
+                            ->content(function (Notifikasi $record): string {
+                                if (! empty($record->target_bidang)) {
+                                    return $record->target_bidang;
+                                }
+                                if ($record->sop && $record->sop->bidang_bagian) {
+                                    return $record->sop->bidang_bagian;
+                                }
+                                $text = $record->pesan ?? '';
+                                if (preg_match('/Bagian\s+([^\)\n]+)/', $text, $m)) {
+                                    return trim($m[0]);
+                                }
+
+                                return '';
+                            }),
                         Forms\Components\DateTimePicker::make('created_at')
                             ->label('Tanggal')
                             ->disabled(),
@@ -149,7 +164,23 @@ class NotifikasiResource extends Resource
 
                         return null;
                     })
-                    ->searchable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('target_bidang_display')
+                    ->label('Target Bidang')
+                    ->getStateUsing(function (Notifikasi $record): ?string {
+                        if (! empty($record->target_bidang)) {
+                            return $record->target_bidang;
+                        }
+                        if ($record->sop && $record->sop->bidang_bagian) {
+                            return $record->sop->bidang_bagian;
+                        }
+                        $text = $record->pesan ?? '';
+                        if (preg_match('/oleh\s+([^\n]+)$/', $text, $m)) {
+                            return trim($m[1]);
+                        }
+
+                        return null;
+                    })
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('creator.name')
                     ->label('Dari')
@@ -160,6 +191,7 @@ class NotifikasiResource extends Resource
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
+            ->headerActions([])
             ->filters([
                 TernaryFilter::make('is_read')
                     ->label('Status Baca')
@@ -175,6 +207,9 @@ class NotifikasiResource extends Resource
                         'sop_delete' => 'Hapus SOP',
                         'sop_review' => 'Review SOP',
                     ]),
+                SelectFilter::make('target_bidang')
+                    ->label('Target Bidang')
+                    ->options(fn () => \App\Models\Sop::distinct()->pluck('bidang_bagian', 'bidang_bagian')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
@@ -189,7 +224,10 @@ class NotifikasiResource extends Resource
                     ->color('success')
                     ->visible(fn (Notifikasi $record) => ! $record->is_read)
                     ->action(fn (Notifikasi $record) => $record->update(['is_read' => true])),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -200,7 +238,9 @@ class NotifikasiResource extends Resource
                         ->action(function ($records) {
                             $records->each(fn (Notifikasi $record) => $record->update(['is_read' => true]));
                         }),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Hapus Semua')
+                        ->requiresConfirmation(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
@@ -208,23 +248,7 @@ class NotifikasiResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $userBidang = Auth::user()->bidang_bagian;
-
-        return parent::getEloquentQuery()
-            ->where(function ($query) use ($userBidang) {
-                $query->whereNull('target_bidang')
-                    ->orWhere('target_bidang', $userBidang);
-            });
-    }
-
-    public static function canViewAny(): bool
-    {
-        return false;
-    }
-
-    public static function canView($record): bool
-    {
-        return false;
+        return parent::getEloquentQuery();
     }
 
     public static function canCreate(): bool

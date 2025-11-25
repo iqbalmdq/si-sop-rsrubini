@@ -3,16 +3,16 @@
 namespace App\Filament\Bidang\Resources;
 
 use App\Filament\Bidang\Resources\SopResource\Pages;
-use App\Models\Sop;
 use App\Models\KategoriSop;
+use App\Models\Sop;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Support\Enums\FontWeight;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
 class SopResource extends Resource
@@ -39,7 +39,6 @@ class SopResource extends Resource
                             ->label('Nomor SOP')
                             ->required()
                             ->unique(ignoreRecord: true)
-                            ->placeholder('Contoh: SOP/PM/001/2024')
                             ->columnSpan(1),
                         Forms\Components\Select::make('kategori_id')
                             ->label('Kategori SOP')
@@ -59,7 +58,7 @@ class SopResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
-                
+
                 Forms\Components\Section::make('Detail SOP')
                     ->schema([
                         Forms\Components\RichEditor::make('isi_sop')
@@ -82,9 +81,10 @@ class SopResource extends Resource
                             ->acceptedFileTypes(['application/pdf'])
                             ->maxSize(5120) // 5MB
                             ->directory('sop-files')
+                            ->disk('public')
                             ->columnSpanFull(),
                     ]),
-                
+
                 Forms\Components\Section::make('Pengaturan SOP')
                     ->schema([
                         Forms\Components\Hidden::make('bidang_bagian')
@@ -137,6 +137,7 @@ class SopResource extends Resource
                     ->limit(40)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
+
                         return strlen($state) > 40 ? $state : null;
                     }),
                 Tables\Columns\TextColumn::make('kategori.nama_kategori')

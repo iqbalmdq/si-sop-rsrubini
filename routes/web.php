@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicSopController;
 use App\Http\Controllers\SurveyController;
+use Illuminate\Support\Facades\Route;
 
 // Public SOP Routes (tanpa authentication)
 Route::prefix('sop')->name('sop.')->group(function () {
     Route::get('/', [PublicSopController::class, 'index'])->name('index');
     Route::get('/search', [PublicSopController::class, 'search'])->name('search');
     Route::get('/bidang', [PublicSopController::class, 'getBidangList'])->name('bidang');
-    Route::get('/{sop:nomor_sop}', [PublicSopController::class, 'show'])->name('show');
-    Route::get('/{sop:nomor_sop}/download', [PublicSopController::class, 'download'])->name('download');
     Route::get('/{type}/{category}/{number}/{year}', [PublicSopController::class, 'showByParts'])->name('show.parts');
     Route::get('/{type}/{category}/{number}/{year}/download', [PublicSopController::class, 'downloadByParts'])->name('download.parts');
+    Route::get('/{sop}/download', [PublicSopController::class, 'download'])->where('sop', '.*')->name('download');
+    Route::get('/{sop}/preview', [PublicSopController::class, 'preview'])->where('sop', '.*')->name('preview');
+    Route::get('/{nomor_sop}', [PublicSopController::class, 'show'])->where('nomor_sop', '.*')->name('show');
 });
 
 // Public Survey Routes (tanpa authentication)

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Authenticate extends Middleware
 {
@@ -12,6 +13,20 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        if ($request->expectsJson()) {
+            return null;
+        }
+
+        $path = trim($request->path(), '/');
+
+        if (Str::startsWith($path, 'direktur')) {
+            return url('/direktur/login');
+        }
+
+        if (Str::startsWith($path, 'bidang')) {
+            return url('/bidang/login');
+        }
+
+        return url('/');
     }
 }

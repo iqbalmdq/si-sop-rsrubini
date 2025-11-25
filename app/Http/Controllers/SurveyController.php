@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Survey;
-use App\Models\SurveyResponse;
 use App\Models\SurveyAnswer;
+use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class SurveyController extends Controller
 {
@@ -16,11 +15,11 @@ class SurveyController extends Controller
         $surveys = Survey::where('status', 'aktif')
             ->where(function ($query) {
                 $query->whereNull('tanggal_mulai')
-                      ->orWhere('tanggal_mulai', '<=', now());
+                    ->orWhere('tanggal_mulai', '<=', now());
             })
             ->where(function ($query) {
                 $query->whereNull('tanggal_berakhir')
-                      ->orWhere('tanggal_berakhir', '>=', now());
+                    ->orWhere('tanggal_berakhir', '>=', now());
             })
             ->with(['creator', 'questions'])
             ->orderBy('created_at', 'desc')
@@ -45,14 +44,17 @@ class SurveyController extends Controller
         }
 
         // Cek apakah user sudah mengisi survei (jika tidak anonymous dan tidak allow multiple)
-        if (!$survey->anonim && !$survey->izin_respon_ganda && Auth::check()) {
+        if (! $survey->anonim && ! $survey->izin_respon_ganda && Auth::check()) {
             $existingResponse = SurveyResponse::where('survey_id', $survey->id)
                 ->where('user_id', Auth::id())
                 ->exists();
 
             if ($existingResponse) {
                 return redirect()->route('survey.thankyou')
-                    ->with('message', 'Anda sudah mengisi survei ini sebelumnya.');
+                    ->with([
+                        'message' => 'Anda sudah mengisi survei ini sebelumnya.',
+                        'share_link' => route('survey.show', $survey),
+                    ]);
             }
         }
 
@@ -75,7 +77,7 @@ class SurveyController extends Controller
         }
 
         // Cek duplikasi respons
-        if (!$survey->anonim && !$survey->izin_respon_ganda && Auth::check()) {
+        if (! $survey->anonim && ! $survey->izin_respon_ganda && Auth::check()) {
             $existingResponse = SurveyResponse::where('survey_id', $survey->id)
                 ->where('user_id', Auth::id())
                 ->exists();
@@ -115,7 +117,7 @@ class SurveyController extends Controller
         // Simpan jawaban
         foreach ($survey->questions as $question) {
             $answer = $request->input("answers.{$question->id}");
-            
+
             if ($answer !== null) {
                 $answerText = null;
                 $answerData = null;
@@ -126,28 +128,28 @@ class SurveyController extends Controller
                     case 'textarea':
                         $answerText = $answer;
                         break;
-                    
+
                     case 'radio':
                     case 'select':
                         $answerText = $answer;
                         $answerData = ['selected' => $answer];
                         break;
-                    
+
                     case 'checkbox':
                         $answerText = is_array($answer) ? implode(', ', $answer) : $answer;
                         $answerData = ['selected' => is_array($answer) ? $answer : [$answer]];
                         break;
-                    
+
                     case 'rating':
                         $answerText = $answer;
                         $answerData = ['rating' => (int) $answer];
                         break;
-                    
+
                     case 'tanggal':
                         $answerText = $answer;
                         $answerData = ['date' => $answer];
                         break;
-                    
+
                     case 'angka':
                         $answerText = $answer;
                         $answerData = ['number' => (float) $answer];
@@ -164,7 +166,10 @@ class SurveyController extends Controller
         }
 
         return redirect()->route('survey.thankyou')
-            ->with('message', 'Terima kasih! Jawaban Anda telah berhasil disimpan.');
+            ->with([
+                'message' => 'Terima kasih! Jawaban Anda telah berhasil disimpan.',
+                'share_link' => route('survey.show', $survey),
+            ]);
     }
 
     public function thankyou()

@@ -2,10 +2,10 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\RoleMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -17,7 +17,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\RoleMiddleware;
 
 class DirekturPanelProvider extends PanelProvider
 {
@@ -39,6 +38,7 @@ class DirekturPanelProvider extends PanelProvider
                 \App\Filament\Direktur\Widgets\SurveyStatsWidget::class,
                 \App\Filament\Direktur\Widgets\SurveyResponseChart::class,
                 \App\Filament\Direktur\Widgets\SurveyByBidangChart::class,
+                \App\Filament\Bidang\Widgets\NotifikasiTerbaruWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -53,14 +53,15 @@ class DirekturPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                RoleMiddleware::class . ':direktur',
+                RoleMiddleware::class.':direktur',
             ])
             ->brandName('SI-SOP Direktur')
             ->favicon(asset('images/favicon.ico'))
             ->navigationGroups([
-                'Dashboard & Analytics',
-                'Analisis & Laporan',
-                'Riwayat & Audit',
+                'Dasbor & Analisis',
+                'Manajemen Survei',
+                'Manajemen Akun',
+                'Notifikasi',
             ]);
     }
 }

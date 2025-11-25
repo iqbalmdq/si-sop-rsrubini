@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Filament\Direktur\Resources\SurveyAnalysisResource\Pages;
+namespace App\Filament\Bidang\Resources\SurveyResource\Pages;
 
-use App\Filament\Direktur\Resources\SurveyAnalysisResource;
+use App\Filament\Bidang\Resources\SurveyResource;
 use App\Models\Survey;
+use Filament\Actions;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
 
-class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\HasInfolists
+class ViewSurveyResults extends Page implements \Filament\Infolists\Contracts\HasInfolists
 {
     use InteractsWithInfolists;
 
-    protected static string $resource = SurveyAnalysisResource::class;
+    protected static string $resource = SurveyResource::class;
 
-    protected static string $view = 'filament.direktur.pages.survey-analysis';
+    protected static string $view = 'filament.bidang.pages.survey-results';
 
     public Survey $record;
 
@@ -27,12 +28,12 @@ class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\H
 
     public function getTitle(): string
     {
-        return 'Analisis Survei: '.$this->record->judul;
+        return 'Hasil Survei: '.$this->record->judul;
     }
 
     public function getHeading(): string
     {
-        return 'Analisis Hasil Survei';
+        return 'Hasil Jawaban Responden';
     }
 
     public function surveyInfolist(Infolist $infolist): Infolist
@@ -62,10 +63,6 @@ class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\H
                                 'tutup' => 'Ditutup',
                                 default => $state,
                             }),
-                        TextEntry::make('creator.name')
-                            ->label('Pembuat Survei'),
-                        TextEntry::make('creator.bidang_bagian')
-                            ->label('Bidang Pembuat'),
                         TextEntry::make('total_responses')
                             ->label('Total Respons')
                             ->getStateUsing(fn (): int => $this->record->responses()->count())
@@ -84,13 +81,13 @@ class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\H
             ]);
     }
 
-    public function getAnalysisData(): array
+    public function getResultsData(): array
     {
         $survey = $this->record;
-        $responses = $survey->responses()->with('answers.question')->get();
+        $responses = $survey->responses()->with(['answers.question', 'user'])->get();
         $questions = $survey->questions()->with('answers')->get();
 
-        $analysisData = [];
+        $resultsData = [];
 
         foreach ($questions as $question) {
             $questionData = [
@@ -183,10 +180,10 @@ class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\H
                     break;
             }
 
-            $analysisData[] = $questionData;
+            $resultsData[] = $questionData;
         }
 
-        return $analysisData;
+        return $resultsData;
     }
 
     public function getDetailedResponses(): array
@@ -219,5 +216,39 @@ class ViewSurveyAnalysis extends Page implements \Filament\Infolists\Contracts\H
         }
 
         return $detailedData;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\Action::make('export_excel')
+                ->label('Export Excel')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->action(function () {
+                    return $this->exportToExcel();
+                }),
+            Actions\Action::make('export_pdf')
+                ->label('Export PDF')
+                ->icon('heroicon-o-document-text')
+                ->color('danger')
+                ->action(function () {
+                    return $this->exportToPdf();
+                }),
+        ];
+    }
+
+    public function exportToExcel()
+    {
+        // Implementation for Excel export
+        // You can use Laravel Excel package for this
+        return response()->download(storage_path('app/survey_results.xlsx'));
+    }
+
+    public function exportToPdf()
+    {
+        // Implementation for PDF export
+        // You can use DomPDF or similar package for this
+        return response()->download(storage_path('app/survey_results.pdf'));
     }
 }
