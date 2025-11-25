@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KategoriSop;
+use App\Models\User;
 use App\Models\Sop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,20 +32,27 @@ class PublicSopController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $query = $request->get('q', '');
+        $query = trim($request->get('q', ''));
+        $tokens = collect(preg_split('/[^\w]+/', $query))
+            ->filter(fn ($t) => $t !== '')
+            ->values();
         $kategori = $request->get('kategori', '');
         $bidang = $request->get('bidang', '');
 
         $sops = Sop::with(['kategori', 'creator'])
             ->where('status', 'aktif')
-            ->when($query, function ($q) use ($query) {
-                $q->where(function ($subQuery) use ($query) {
-                    $subQuery
-                        ->where('nomor_sop', 'like', "%{$query}%")
-                        ->orWhere('judul_sop', 'like', "%{$query}%")
-                        ->orWhere('deskripsi', 'like', "%{$query}%")
-                        ->orWhere('isi_sop', 'like', "%{$query}%");
-                });
+            ->when($tokens->isNotEmpty(), function ($q) use ($tokens) {
+                foreach ($tokens as $token) {
+                    $q->where(function ($subQuery) use ($token) {
+                        $subQuery
+                            ->where('nomor_sop', 'like', "%{$token}%")
+                            ->orWhere('judul_sop', 'like', "%{$token}%")
+                            ->orWhere('deskripsi', 'like', "%{$token}%");
+                        if (strlen($token) >= 3) {
+                            $subQuery->orWhere('isi_sop', 'like', "%{$token}%");
+                        }
+                    });
+                }
             })
             ->when($kategori, function ($q) use ($kategori) {
                 $q->where('kategori_id', $kategori);
@@ -160,13 +168,20 @@ class PublicSopController extends Controller
 
     public function getBidangList(): JsonResponse
     {
-        $bidangs = Sop::query()
+        $sopBidangs = Sop::query()
             ->where('status', 'aktif')
             ->select('bidang_bagian')
             ->distinct()
-            ->orderBy('bidang_bagian')
-            ->pluck('bidang_bagian')
-            ->values();
+            ->pluck('bidang_bagian');
+
+        $userBidangs = User::query()
+            ->where('role', 'bidang')
+            ->where('is_active', true)
+            ->select('bidang_bagian')
+            ->distinct()
+            ->pluck('bidang_bagian');
+
+        $bidangs = $sopBidangs->merge($userBidangs)->unique()->sort()->values();
 
         return response()->json($bidangs);
     }

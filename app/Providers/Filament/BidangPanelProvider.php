@@ -36,6 +36,7 @@ class BidangPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Bidang/Widgets'), for: 'App\\Filament\\Bidang\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                \App\Filament\Bidang\Widgets\SopPerStatusBidangChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

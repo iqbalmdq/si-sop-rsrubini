@@ -253,13 +253,30 @@ function sopSearch() {
         },
         
         async search(page = 1) {
+            const query = (this.searchQuery || '').trim();
+            const kategori = this.selectedKategori;
+            const bidang = this.selectedBidang;
+
+            if (query === '' && !kategori && !bidang) {
+                this.hasSearched = false;
+                this.searchResults = [];
+                this.pagination = {
+                    current_page: 1,
+                    last_page: 1,
+                    per_page: 10,
+                    total: 0
+                };
+                this.loading = false;
+                return;
+            }
+
             this.loading = true;
             this.hasSearched = true;
             
             const params = new URLSearchParams({
-                q: this.searchQuery,
-                kategori: this.selectedKategori,
-                bidang: this.selectedBidang,
+                q: query,
+                kategori: kategori,
+                bidang: bidang,
                 page: page
             });
             
