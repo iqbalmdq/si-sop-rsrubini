@@ -40,14 +40,20 @@ Sistem Informasi untuk mempermudah Petugas Rumah Sakit dalam Pencarian Dokumen S
    - Statistik SOP per bidang dan status
 
 ### 🛠️ Teknologi
-- **Backend**: Laravel 10.10
+- **Backend**: Laravel 10.10 (PHP 8.1+)
 - **Admin Panel**: Filament 3.0
 - **Database**: MySQL
-- **Frontend**: Tailwind CSS, Alpine.js
+- **Frontend**: Tailwind CSS (CDN), Alpine.js (CDN)
+- **Build Tool**: Vite 5
+- **HTTP Client**: Axios 1.6
 - **Charts**: Chart.js 4.5.0
 - **File Upload**: Support PDF untuk SOP
 
 ### 📦 Instalasi
+
+0. **Persyaratan**
+   - PHP 8.1+, Composer
+   - Node.js 18+, npm
 
 1. **Clone Repository**
    ```bash
@@ -83,6 +89,7 @@ Sistem Informasi untuk mempermudah Petugas Rumah Sakit dalam Pencarian Dokumen S
    ```bash
    npm run build
    ```
+   Opsional saat pengembangan: `npm run dev`
 
 7. **Run Application**
    ```bash
@@ -94,13 +101,14 @@ Sistem Informasi untuk mempermudah Petugas Rumah Sakit dalam Pencarian Dokumen S
 | Role | Email | Password | Bidang/Bagian |
 |------|-------|----------|---------------|
 | Direktur | direktur@rsrubini.com | password123 | Direktur |
-| Bidang Medis | medis@rsrubini.com | password123 | Bidang Medis |
-| Bidang Keperawatan | keperawatan@rsrubini.com | password123 | Bidang Keperawatan |
-| Bidang Penunjang | penunjang@rsrubini.com | password123 | Bidang Penunjang |
+| Bidang (Bagian Tata Usaha) | tatausaha@rsrubini.com | password123 | Bagian Tata Usaha |
+| Bidang (Pelayanan) | pelayanan@rsrubini.com | password123 | Bidang Pelayanan |
+| Bidang (Pengendalian) | pengendalian@rsrubini.com | password123 | Bidang Pengendalian |
+| Bidang (Penunjang) | penunjang@rsrubini.com | password123 | Bidang Penunjang |
 
 ### 🌐 URL Akses
 
-- **Pencarian Publik**: `http://localhost:8000/`
+- **Pencarian Publik**: `http://localhost:8000/` (redirect ke `/sop`)
 - **Survei Publik**: `http://localhost:8000/survey`
 - **Panel Bidang**: `http://localhost:8000/bidang`
 - **Panel Direktur**: `http://localhost:8000/direktur`
@@ -203,7 +211,7 @@ Untuk bantuan teknis atau pertanyaan, silakan hubungi tim pengembang atau buat i
 
 ### 📁 Struktur Project
 ```
-si-sop-rs-rubini/
+si-sop-rsrubini/
 ├── app/
 ├── database/
 ├── public/
