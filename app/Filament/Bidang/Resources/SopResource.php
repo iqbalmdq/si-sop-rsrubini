@@ -3,6 +3,7 @@
 namespace App\Filament\Bidang\Resources;
 
 use App\Filament\Bidang\Resources\SopResource\Pages;
+use App\Filament\Bidang\Resources\SopResource\RelationManagers;
 use App\Models\KategoriSop;
 use App\Models\Sop;
 use Filament\Forms;
@@ -215,6 +216,13 @@ class SopResource extends Resource
     {
         // Hanya tampilkan SOP dari bidang/bagian user yang login
         return parent::getEloquentQuery()->where('bidang_bagian', Auth::user()->bidang_bagian);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\HistoriesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

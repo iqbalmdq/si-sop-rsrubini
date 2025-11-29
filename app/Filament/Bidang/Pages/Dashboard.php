@@ -9,7 +9,9 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            \Filament\Widgets\AccountWidget::class,
+            \App\Filament\Bidang\Widgets\SopStatsOverview::class,
+            \App\Filament\Bidang\Widgets\SopPerStatusBidangChart::class,
+            \App\Filament\Bidang\Widgets\SopPerKategoriBidangChart::class,
         ];
     }
 }

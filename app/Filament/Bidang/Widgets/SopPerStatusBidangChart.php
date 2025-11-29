@@ -12,7 +12,7 @@ class SopPerStatusBidangChart extends ChartWidget
 
     protected static ?int $sort = 1;
 
-    protected int | string | array $columnSpan = 'full';
+    // protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array
     {
