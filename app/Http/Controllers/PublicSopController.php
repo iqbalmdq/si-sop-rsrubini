@@ -38,8 +38,10 @@ class PublicSopController extends Controller
             ->values();
         $kategori = $request->get('kategori', '');
         $bidang = $request->get('bidang', '');
+        $showAll = $request->boolean('show_all');
+        $noPagination = $request->boolean('no_pagination');
 
-        $sops = Sop::with(['kategori', 'creator'])
+        $queryBuilder = Sop::with(['kategori', 'creator'])
             ->where('status', 'aktif')
             ->when($tokens->isNotEmpty(), function ($q) use ($tokens) {
                 foreach ($tokens as $token) {
@@ -60,17 +62,30 @@ class PublicSopController extends Controller
             ->when($bidang, function ($q) use ($bidang) {
                 $q->where('bidang_bagian', $bidang);
             })
-            ->orderBy('nomor_sop')
-            ->paginate(10);
+            ->orderBy($showAll ? 'judul_sop' : 'nomor_sop');
 
-        return response()->json([
-            'data' => $sops->items(),
-            'pagination' => [
+        if ($noPagination) {
+            $items = $queryBuilder->get();
+            $pagination = [
+                'current_page' => 1,
+                'last_page' => 1,
+                'per_page' => $items->count(),
+                'total' => $items->count(),
+            ];
+        } else {
+            $sops = $queryBuilder->paginate(10);
+            $items = $sops->items();
+            $pagination = [
                 'current_page' => $sops->currentPage(),
                 'last_page' => $sops->lastPage(),
                 'per_page' => $sops->perPage(),
                 'total' => $sops->total(),
-            ],
+            ];
+        }
+
+        return response()->json([
+            'data' => $items,
+            'pagination' => $pagination,
         ]);
     }
 

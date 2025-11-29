@@ -89,6 +89,25 @@
                 </select>
             </div>
         </div>
+        <div class="mt-4 flex justify-end">
+            <button
+                x-show="!showAll"
+                @click="showAll = true; noPagination = true; searchQuery=''; selectedKategori=''; selectedBidang=''; search()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+                <i class="fas fa-sort-alpha-down mr-2"></i>
+                Tampilkan Semua Dokumen (A-Z)
+            </button>
+            <button
+                x-show="showAll"
+                x-cloak
+                @click="showAll = false; noPagination = false; search()"
+                class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+                <i class="fas fa-times mr-2"></i>
+                Batal Lihat Semua Dokumen
+            </button>
+        </div>
     </div>
     
     <!-- Loading State -->
@@ -208,7 +227,7 @@
                             <i class="fas fa-folder text-xl"></i>
                         </div>
                         <span class="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full">
-                            {{ $kategori->sops_count }} SOP
+                            {{ $kategori->sops_count }} Dokumen
                         </span>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $kategori->nama_kategori }}</h3>
@@ -222,15 +241,17 @@
 @push('scripts')
 <script>
 function sopSearch() {
-    return {
-        searchQuery: '',
-        selectedKategori: '',
-        selectedBidang: '',
-        searchResults: [],
-        bidangList: [],
-        loading: false,
-        hasSearched: false,
-        showPreview: false,
+        return {
+            searchQuery: '',
+            selectedKategori: '',
+            selectedBidang: '',
+            noPagination: false,
+            showAll: false,
+            searchResults: [],
+            bidangList: [],
+            loading: false,
+            hasSearched: false,
+            showPreview: false,
         previewUrl: '',
         pagination: {
             current_page: 1,
@@ -257,7 +278,7 @@ function sopSearch() {
             const kategori = this.selectedKategori;
             const bidang = this.selectedBidang;
 
-            if (query === '' && !kategori && !bidang) {
+            if (query === '' && !kategori && !bidang && !this.showAll) {
                 this.hasSearched = false;
                 this.searchResults = [];
                 this.pagination = {
@@ -277,8 +298,13 @@ function sopSearch() {
                 q: query,
                 kategori: kategori,
                 bidang: bidang,
-                page: page
+                show_all: this.showAll ? '1' : '0',
+                no_pagination: this.noPagination ? '1' : '0'
             });
+
+            if (!this.noPagination) {
+                params.set('page', page);
+            }
             
             try {
                 const response = await fetch(`/sop/search?${params}`);

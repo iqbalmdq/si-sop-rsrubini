@@ -44,6 +44,31 @@
                     <a href="{{ route('survey.index') }}" class="hover:text-blue-200 transition-colors">
                         <i class="fas fa-poll mr-2"></i>Survei Publik
                     </a>
+
+                    <!-- Login Dropdown -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="hover:text-blue-200 transition-colors flex items-center focus:outline-none">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            <i class="fas fa-chevron-down ml-1 text-xs transition-transform duration-200" :class="{'rotate-180': open}"></i>
+                        </button>
+                        <div x-show="open" 
+                             @click.away="open = false"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 text-gray-800" 
+                             style="display: none;">
+                            <a href="https://sisop.teknoborneo.com/public/direktur/login" class="block px-4 py-2 text-sm hover:bg-gray-100">
+                                <i class="fas fa-user-tie mr-2 w-5"></i>Login Direktur
+                            </a>
+                            <a href="https://sisop.teknoborneo.com/public/bidang/login" class="block px-4 py-2 text-sm hover:bg-gray-100">
+                                <i class="fas fa-users mr-2 w-5"></i>Login Bidang
+                            </a>
+                        </div>
+                    </div>
                 </nav>
 
                 <!-- Mobile Menu Button -->
@@ -61,6 +86,27 @@
                     <a href="{{ route('survey.index') }}" class="block py-2 hover:text-blue-200 transition-colors">
                         <i class="fas fa-poll mr-2"></i>Survei Publik
                     </a>
+                    
+                    <!-- Mobile Login Menu -->
+                    <div x-data="{ open: false }" class="border-t border-blue-500 pt-2 mt-2">
+                        <button @click="open = !open" class="w-full text-left py-2 hover:text-blue-200 transition-colors flex items-center justify-between focus:outline-none">
+                            <span><i class="fas fa-sign-in-alt mr-2"></i>Login</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+                        </button>
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             class="pl-6 space-y-2 mt-1" 
+                             style="display: none;">
+                            <a href="https://sisop.teknoborneo.com/public/direktur/login" class="block py-2 text-sm hover:text-blue-200">
+                                <i class="fas fa-user-tie mr-2 w-5"></i>Login Direktur
+                            </a>
+                            <a href="https://sisop.teknoborneo.com/public/bidang/login" class="block py-2 text-sm hover:text-blue-200">
+                                <i class="fas fa-users mr-2 w-5"></i>Login Bidang
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
