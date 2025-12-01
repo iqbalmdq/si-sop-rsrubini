@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SopPerKategoriBidangChart extends ChartWidget
 {
-    protected static ?string $heading = 'SOP per Kategori (Bidang)';
+    protected static ?string $heading = 'Dokumen per Kategori (Bidang)';
 
     protected static ?int $sort = 2;
 
@@ -34,7 +34,7 @@ class SopPerKategoriBidangChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Jumlah SOP',
+                    'label' => 'Jumlah Dokumen',
                     'data' => $data->pluck('sops_count')->toArray(),
                     'backgroundColor' => [
                         '#3B82F6', // Blue

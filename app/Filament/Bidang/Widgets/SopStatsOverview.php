@@ -36,18 +36,18 @@ class SopStatsOverview extends BaseWidget
             ->count();
 
         return [
-            Stat::make('Total SOP', $totalSop)
-                ->description('Semua SOP di bidang ini')
+            Stat::make('Total Dokumen', $totalSop)
+                ->description('Semua dokumen di bidang ini')
                 ->descriptionIcon('heroicon-m-document-duplicate')
                 ->color('primary'),
 
-            Stat::make('SOP Aktif', $activeSop)
-                ->description('SOP yang sedang berlaku')
+            Stat::make('Dokumen Aktif', $activeSop)
+                ->description('Dokumen yang sedang berlaku')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
 
-            Stat::make('SOP Draft', $draftSop)
-                ->description('SOP dalam penyusunan')
+            Stat::make('Dokumen Draft', $draftSop)
+                ->description('Dokumen dalam penyusunan')
                 ->descriptionIcon('heroicon-m-pencil-square')
                 ->color('warning'),
 

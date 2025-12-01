@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SopPerStatusBidangChart extends ChartWidget
 {
-    protected static ?string $heading = 'Distribusi Status SOP (Bidang)';
+    protected static ?string $heading = 'Distribusi Status Dokumen (Bidang)';
 
     protected static ?int $sort = 1;
 

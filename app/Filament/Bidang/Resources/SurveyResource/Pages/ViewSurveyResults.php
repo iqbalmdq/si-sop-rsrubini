@@ -218,26 +218,6 @@ class ViewSurveyResults extends Page implements \Filament\Infolists\Contracts\Ha
         return $detailedData;
     }
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\Action::make('export_excel')
-                ->label('Export Excel')
-                ->icon('heroicon-o-document-arrow-down')
-                ->color('success')
-                ->action(function () {
-                    return $this->exportToExcel();
-                }),
-            Actions\Action::make('export_pdf')
-                ->label('Export PDF')
-                ->icon('heroicon-o-document-text')
-                ->color('danger')
-                ->action(function () {
-                    return $this->exportToPdf();
-                }),
-        ];
-    }
-
     public function exportToExcel()
     {
         // Implementation for Excel export

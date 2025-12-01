@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class SopPerBidangChart extends ChartWidget
 {
-    protected static ?string $heading = 'SOP per Bidang/Bagian';
+    protected static ?string $heading = 'Dokumen per Bidang/Bagian';
     
     protected static ?int $sort = 3;
 
@@ -22,7 +22,7 @@ class SopPerBidangChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Jumlah SOP',
+                    'label' => 'Jumlah Dokumen',
                     'data' => $data->pluck('total')->toArray(),
                     'backgroundColor' => '#3B82F6',
                     'borderColor' => '#1D4ED8',

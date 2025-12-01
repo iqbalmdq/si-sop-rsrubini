@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Pencarian SOP - RS Rubini Mempawah')
+@section('title', 'Pencarian Dokumen - RS Rubini Mempawah')
 
 @section('content')
 <div x-data="sopSearch()" x-init="init()">
@@ -8,11 +8,11 @@
     <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg p-8 mb-8">
         <div class="text-center">
             <h1 class="text-3xl md:text-4xl font-bold mb-4">
-                <i class="fas fa-file-medical mr-3"></i>
-                Pencarian Dokumen SOP
+                <i class="fas fa-search mr-3"></i>
+                Pencarian Dokumen
             </h1>
             <p class="text-xl text-blue-100 mb-6">
-                Temukan Standard Operating Procedure (SOP) dengan mudah dan cepat
+                Temukan dokumen dengan mudah dan cepat
             </p>
             <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 inline-block">
                 <div class="flex items-center justify-center space-x-6 text-sm">
@@ -20,7 +20,7 @@
                         <i class="fas fa-file-alt text-2xl mr-2"></i>
                         <div>
                             <div class="font-semibold">{{ $totalSop }}</div>
-                            <div class="text-blue-200">Total SOP Aktif</div>
+                            <div class="text-blue-200">Total Dokumen Aktif</div>
                         </div>
                     </div>
                     <div class="flex items-center">
@@ -42,13 +42,13 @@
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     <i class="fas fa-search mr-1"></i>
-                    Cari SOP
+                    Cari Dokumen
                 </label>
                 <input 
                     type="text" 
                     x-model="searchQuery"
                     @input.debounce.500ms="search()"
-                    placeholder="Masukkan nomor SOP, judul, atau kata kunci..."
+                    placeholder="Masukkan nomor dokumen, judul, atau kata kunci..."
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
             </div>
@@ -113,7 +113,7 @@
     <!-- Loading State -->
     <div x-show="loading" x-cloak class="text-center py-8">
         <i class="fas fa-spinner fa-spin text-3xl text-blue-600 mb-4"></i>
-        <p class="text-gray-600">Mencari SOP...</p>
+        <p class="text-gray-600">Mencari Dokumen...</p>
     </div>
     
     <!-- Search Results -->
@@ -122,7 +122,7 @@
             <h2 class="text-xl font-semibold text-gray-800">
                 <i class="fas fa-list mr-2"></i>
                 Hasil Pencarian
-                <span class="text-sm font-normal text-gray-600" x-text="`(${pagination.total} SOP ditemukan)`"></span>
+                <span class="text-sm font-normal text-gray-600" x-text="`(${pagination.total} Dokumen ditemukan)`"></span>
             </h2>
         </div>
         
@@ -197,7 +197,7 @@
     <div x-show="showPreview" x-cloak class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl">
             <div class="flex items-center justify-between px-4 py-3 border-b">
-                <div class="text-lg font-semibold">Preview Dokumen SOP</div>
+                <div class="text-lg font-semibold">Preview Dokumen</div>
                 <button @click="closePreview()" class="text-gray-600 hover:text-gray-800"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-0">
@@ -209,7 +209,7 @@
     <!-- No Results -->
     <div x-show="!loading && searchResults.length === 0 && hasSearched" x-cloak class="text-center py-12">
         <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">Tidak ada SOP ditemukan</h3>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">Tidak ada Dokumen ditemukan</h3>
         <p class="text-gray-500">Coba ubah kata kunci pencarian atau filter yang digunakan.</p>
     </div>
     
@@ -217,7 +217,7 @@
     <div x-show="!loading && !hasSearched" x-cloak>
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">
             <i class="fas fa-th-large mr-2"></i>
-            Kategori SOP
+            Kategori Dokumen
         </h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($kategoris as $kategori)

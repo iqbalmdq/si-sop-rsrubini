@@ -17,13 +17,13 @@ class KategoriSopResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Manajemen SOP';
+    protected static ?string $navigationGroup = 'Manajemen Dokumen';
 
-    protected static ?string $navigationLabel = 'Kategori SOP';
+    protected static ?string $navigationLabel = 'Kategori Dokumen';
 
-    protected static ?string $modelLabel = 'Kategori SOP';
+    protected static ?string $modelLabel = 'Kategori Dokumen';
 
-    protected static ?string $pluralModelLabel = 'Kategori SOP';
+    protected static ?string $pluralModelLabel = 'Kategori Dokumen';
 
     public static function form(Form $form): Form
     {
@@ -76,7 +76,7 @@ class KategoriSopResource extends Resource
                     ->trueColor('success')
                     ->falseColor('danger'),
                 Tables\Columns\TextColumn::make('sops_count')
-                    ->label('Jumlah SOP')
+                    ->label('Jumlah Dokumen')
                     ->counts('sops')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

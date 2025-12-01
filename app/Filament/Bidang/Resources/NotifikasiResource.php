@@ -59,7 +59,7 @@ class NotifikasiResource extends Resource
                             ->label('Tipe')
                             ->disabled(),
                         Forms\Components\Placeholder::make('nomor_sop_display')
-                            ->label('Nomor SOP')
+                            ->label('Nomor Dokumen')
                             ->content(function (Notifikasi $record): string {
                                 if ($record->sop && $record->sop->nomor_sop) {
                                     return $record->sop->nomor_sop;
@@ -130,14 +130,14 @@ class NotifikasiResource extends Resource
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'sop_baru' => 'SOP Baru',
-                        'sop_update' => 'Update SOP',
-                        'sop_delete' => 'Hapus SOP',
-                        'sop_review' => 'Review SOP',
+                        'sop_baru' => 'Dokumen Baru',
+                        'sop_update' => 'Update Dokumen',
+                        'sop_delete' => 'Hapus Dokumen',
+                        'sop_review' => 'Review Dokumen',
                         default => $state,
                     }),
                 Tables\Columns\TextColumn::make('nomor_sop_display')
-                    ->label('Nomor SOP')
+                    ->label('Nomor Dokumen')
                     ->getStateUsing(function (Notifikasi $record): ?string {
                         if ($record->sop && $record->sop->nomor_sop) {
                             return $record->sop->nomor_sop;
@@ -170,10 +170,10 @@ class NotifikasiResource extends Resource
                 SelectFilter::make('tipe')
                     ->label('Tipe Notifikasi')
                     ->options([
-                        'sop_baru' => 'SOP Baru',
-                        'sop_update' => 'Update SOP',
-                        'sop_delete' => 'Hapus SOP',
-                        'sop_review' => 'Review SOP',
+                        'sop_baru' => 'Dokumen Baru',
+                        'sop_update' => 'Update Dokumen',
+                        'sop_delete' => 'Hapus Dokumen',
+                        'sop_review' => 'Review Dokumen',
                     ]),
             ])
             ->actions([

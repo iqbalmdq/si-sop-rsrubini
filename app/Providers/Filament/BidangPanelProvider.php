@@ -53,10 +53,10 @@ class BidangPanelProvider extends PanelProvider
                 Authenticate::class,
                 RoleMiddleware::class . ':bidang',
             ])
-            ->brandName('SI-SOP Bidang')
+            ->brandName('SI-DOK Bidang')
             ->favicon(asset('images/favicon.ico'))
             ->navigationGroups([
-                'Manajemen SOP',
+                'Manajemen Dokumen',
                 'Manajemen Survei',
                 'Notifikasi & Komunikasi',
                 'Pengaturan',

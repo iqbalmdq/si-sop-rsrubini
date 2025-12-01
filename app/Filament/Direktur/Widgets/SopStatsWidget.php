@@ -26,23 +26,23 @@ class SopStatsWidget extends BaseWidget
             ->count();
             
         return [
-            Stat::make('Total SOP', $totalSop)
-                ->description('Total dokumen SOP')
+            Stat::make('Total Dokumen', $totalSop)
+                ->description('Total dokumen')
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('primary'),
                 
-            Stat::make('SOP Aktif', $sopAktif)
-                ->description($persentaseAktif . '% dari total SOP')
+            Stat::make('Dokumen Aktif', $sopAktif)
+                ->description($persentaseAktif . '% dari total dokumen')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
                 
-            Stat::make('SOP Draft', $sopDraft)
+            Stat::make('Dokumen Draft', $sopDraft)
                 ->description('Menunggu persetujuan')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('warning'),
                 
             Stat::make('Perlu Review', $sopPerluReview)
-                ->description('SOP lebih dari 1 tahun')
+                ->description('Dokumen lebih dari 1 tahun')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color('danger'),
         ];

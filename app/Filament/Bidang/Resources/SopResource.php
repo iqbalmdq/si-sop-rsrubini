@@ -3,7 +3,6 @@
 namespace App\Filament\Bidang\Resources;
 
 use App\Filament\Bidang\Resources\SopResource\Pages;
-use App\Filament\Bidang\Resources\SopResource\RelationManagers;
 use App\Models\KategoriSop;
 use App\Models\Sop;
 use Filament\Forms;
@@ -22,48 +21,47 @@ class SopResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = 'Manajemen SOP';
+    protected static ?string $navigationGroup = 'Manajemen Dokumen';
 
-    protected static ?string $navigationLabel = 'Dokumen SOP';
+    protected static ?string $navigationLabel = 'Semua Dokumen';
 
-    protected static ?string $modelLabel = 'SOP';
+    protected static ?string $modelLabel = 'Semua Dokumen';
 
-    protected static ?string $pluralModelLabel = 'SOP';
+    protected static ?string $pluralModelLabel = 'Semua Dokumen';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi Dasar SOP')
+                Forms\Components\Section::make('Informasi Dasar Dokumen')
                     ->schema([
                         Forms\Components\TextInput::make('nomor_sop')
-                            ->label('Nomor SOP')
+                            ->label('Nomor Dokumen')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->columnSpan(1),
                         Forms\Components\Select::make('kategori_id')
-                            ->label('Kategori SOP')
+                            ->label('Kategori Dokumen')
                             ->options(KategoriSop::where('is_active', true)->pluck('nama_kategori', 'id'))
                             ->required()
                             ->searchable()
                             ->columnSpan(1),
                         Forms\Components\TextInput::make('judul_sop')
-                            ->label('Judul SOP')
+                            ->label('Judul Dokumen')
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('deskripsi')
                             ->label('Deskripsi Singkat')
-                            ->required()
                             ->rows(3)
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Detail SOP')
+                Forms\Components\Section::make('Detail Dokumen')
                     ->schema([
                         Forms\Components\RichEditor::make('isi_sop')
-                            ->label('Isi SOP')
+                            ->label('Isi Dokumen')
                             ->required()
                             ->toolbarButtons([
                                 'bold',
@@ -86,12 +84,12 @@ class SopResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('Pengaturan SOP')
+                Forms\Components\Section::make('Pengaturan Dokumen')
                     ->schema([
                         Forms\Components\Hidden::make('bidang_bagian')
                             ->default(fn () => Auth::user()->bidang_bagian),
                         Forms\Components\Select::make('status')
-                            ->label('Status SOP')
+                            ->label('Status Dokumen')
                             ->options([
                                 'draft' => 'Draft',
                                 'aktif' => 'Aktif',
@@ -127,12 +125,12 @@ class SopResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_sop')
-                    ->label('Nomor SOP')
+                    ->label('Nomor Dokumen')
                     ->searchable()
                     ->sortable()
                     ->weight(FontWeight::Bold),
                 Tables\Columns\TextColumn::make('judul_sop')
-                    ->label('Judul SOP')
+                    ->label('Judul Dokumen')
                     ->searchable()
                     ->sortable()
                     ->limit(40)
@@ -216,13 +214,6 @@ class SopResource extends Resource
     {
         // Hanya tampilkan SOP dari bidang/bagian user yang login
         return parent::getEloquentQuery()->where('bidang_bagian', Auth::user()->bidang_bagian);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\HistoriesRelationManager::class,
-        ];
     }
 
     public static function getPages(): array

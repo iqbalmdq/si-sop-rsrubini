@@ -9,7 +9,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class AktivitasTerbaruWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Aktivitas SOP Terbaru';
+    protected static ?string $heading = 'Aktivitas Dokumen Terbaru';
     
     protected static ?int $sort = 4;
     
@@ -25,10 +25,10 @@ class AktivitasTerbaruWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('sop.nomor_sop')
-                    ->label('Nomor SOP')
+                    ->label('Nomor Dokumen')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sop.judul_sop')
-                    ->label('Judul SOP')
+                    ->label('Judul Dokumen')
                     ->limit(30)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('aksi')

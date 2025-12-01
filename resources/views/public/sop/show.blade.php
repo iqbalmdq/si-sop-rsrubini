@@ -90,7 +90,7 @@
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">
                 <i class="fas fa-file-alt text-blue-600 mr-2"></i>
-                Isi SOP
+                Isi Dokumen
             </h2>
             <div class="prose max-w-none">
                 {!! $sop->isi_sop !!}
@@ -102,7 +102,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-semibold text-gray-900 mb-4">
                     <i class="fas fa-link text-blue-600 mr-2"></i>
-                    SOP Terkait
+                    Dokumen Terkait
                 </h2>
                 <div class="grid md:grid-cols-2 gap-4">
                     @foreach ($relatedSops as $relatedSop)
@@ -134,7 +134,7 @@
                 } else {
                     // Fallback: copy to clipboard
                     navigator.clipboard.writeText(window.location.href).then(() => {
-                        alert('Link SOP telah disalin ke clipboard!');
+                        alert('Link Dokumen telah disalin ke clipboard!');
                     });
                 }
             }

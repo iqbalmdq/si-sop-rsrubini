@@ -96,7 +96,9 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div class="bg-white p-4 rounded border">
                                         <h4 class="font-medium mb-3 text-gray-700">Grafik Hasil:</h4>
-                                        <canvas id="chart-{{ $index }}" width="400" height="300"></canvas>
+                                        <div class="relative h-72 w-full">
+                                            <canvas id="chart-{{ $index }}"></canvas>
+                                        </div>
                                     </div>
                                     <div class="bg-white p-4 rounded border">
                                         <h4 class="font-medium mb-3 text-gray-700">Rincian Jawaban:</h4>
@@ -248,6 +250,7 @@
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false,
                             plugins: {
                                 legend: {
                                     position: 'bottom',

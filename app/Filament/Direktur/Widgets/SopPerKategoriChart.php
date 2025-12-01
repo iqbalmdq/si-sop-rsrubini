@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class SopPerKategoriChart extends ChartWidget
 {
-    protected static ?string $heading = 'Distribusi SOP per Kategori';
+    protected static ?string $heading = 'Distribusi Dokumen per Kategori';
     
     protected static ?int $sort = 2;
     
@@ -23,7 +23,7 @@ class SopPerKategoriChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Jumlah SOP',
+                    'label' => 'Jumlah Dokumen',
                     'data' => $data->pluck('sops_count')->toArray(),
                     'backgroundColor' => [
                         '#3B82F6', // Blue

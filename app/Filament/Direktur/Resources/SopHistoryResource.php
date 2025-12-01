@@ -22,11 +22,11 @@ class SopHistoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Dasbor & Analisis';
 
-    protected static ?string $navigationLabel = 'Riwayat SOP';
+    protected static ?string $navigationLabel = 'Riwayat Dokumen';
 
-    protected static ?string $modelLabel = 'Riwayat SOP';
+    protected static ?string $modelLabel = 'Riwayat Dokumen';
 
-    protected static ?string $pluralModelLabel = 'Riwayat SOP';
+    protected static ?string $pluralModelLabel = 'Riwayat Dokumen';
 
     protected static ?int $navigationSort = 2;
 
@@ -37,10 +37,10 @@ class SopHistoryResource extends Resource
                 Forms\Components\Section::make('Detail History')
                     ->schema([
                         Forms\Components\TextInput::make('sop.nomor_sop')
-                            ->label('Nomor SOP')
+                            ->label('Nomor Dokumen')
                             ->disabled(),
                         Forms\Components\TextInput::make('sop.judul_sop')
-                            ->label('Judul SOP')
+                            ->label('Judul Dokumen')
                             ->disabled(),
                         Forms\Components\TextInput::make('aksi')
                             ->label('Aksi')
@@ -79,11 +79,11 @@ class SopHistoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('sop.nomor_sop')
-                    ->label('Nomor SOP')
+                    ->label('Nomor Dokumen')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sop.judul_sop')
-                    ->label('Judul SOP')
+                    ->label('Judul Dokumen')
                     ->searchable()
                     ->limit(40)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {

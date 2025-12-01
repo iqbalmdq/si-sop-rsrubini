@@ -22,11 +22,11 @@ class SopResource extends Resource
 
     protected static ?string $navigationGroup = 'Dasbor & Analisis';
 
-    protected static ?string $navigationLabel = 'Semua SOP';
+    protected static ?string $navigationLabel = 'Semua Dokumen';
 
-    protected static ?string $modelLabel = 'SOP';
+    protected static ?string $modelLabel = 'Dokumen';
 
-    protected static ?string $pluralModelLabel = 'SOP';
+    protected static ?string $pluralModelLabel = 'Dokumen';
 
     protected static ?int $navigationSort = 1;
 
@@ -37,10 +37,10 @@ class SopResource extends Resource
                 Forms\Components\Section::make('Informasi SOP')
                     ->schema([
                         Forms\Components\TextInput::make('nomor_sop')
-                            ->label('Nomor SOP')
+                            ->label('Nomor Dokumen')
                             ->disabled(),
                         Forms\Components\TextInput::make('judul_sop')
-                            ->label('Judul SOP')
+                            ->label('Judul Dokumen')
                             ->disabled(),
                         Forms\Components\Select::make('kategori_id')
                             ->label('Kategori')
@@ -55,7 +55,7 @@ class SopResource extends Resource
                             ->rows(3)
                             ->columnSpanFull(),
                         Forms\Components\RichEditor::make('isi_sop')
-                            ->label('Isi SOP')
+                            ->label('Isi Dokumen')
                             ->disabled()
                             ->columnSpanFull(),
                     ])
@@ -91,12 +91,12 @@ class SopResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_sop')
-                    ->label('Nomor SOP')
+                    ->label('Nomor Dokumen')
                     ->searchable()
                     ->sortable()
                     ->weight(FontWeight::Bold),
                 Tables\Columns\TextColumn::make('judul_sop')
-                    ->label('Judul SOP')
+                    ->label('Judul Dokumen')
                     ->searchable()
                     ->sortable()
                     ->limit(40)

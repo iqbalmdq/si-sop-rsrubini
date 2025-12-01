@@ -55,7 +55,7 @@ class DirekturPanelProvider extends PanelProvider
                 Authenticate::class,
                 RoleMiddleware::class.':direktur',
             ])
-            ->brandName('SI-SOP Direktur')
+            ->brandName('SI-DOK Direktur')
             ->favicon(asset('images/favicon.ico'))
             ->navigationGroups([
                 'Dasbor & Analisis',
